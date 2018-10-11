@@ -1,36 +1,14 @@
 # egg-squel
 
-[![NPM version][npm-image]][npm-url]
-[![build status][travis-image]][travis-url]
-[![Test coverage][codecov-image]][codecov-url]
-[![David deps][david-image]][david-url]
-[![Known Vulnerabilities][snyk-image]][snyk-url]
-[![npm download][download-image]][download-url]
+[eggjs](https://eggjs.org)的MySQL插件，与官方的egg-mysql不同，本插件基于[squel](https://github.com/hiddentao/squel)构造sql语句，具有更强的拓展性，避免裸写sql语句
 
-[npm-image]: https://img.shields.io/npm/v/egg-squel.svg?style=flat-square
-[npm-url]: https://npmjs.org/package/egg-squel
-[travis-image]: https://img.shields.io/travis/eggjs/egg-squel.svg?style=flat-square
-[travis-url]: https://travis-ci.org/eggjs/egg-squel
-[codecov-image]: https://img.shields.io/codecov/c/github/eggjs/egg-squel.svg?style=flat-square
-[codecov-url]: https://codecov.io/github/eggjs/egg-squel?branch=master
-[david-image]: https://img.shields.io/david/eggjs/egg-squel.svg?style=flat-square
-[david-url]: https://david-dm.org/eggjs/egg-squel
-[snyk-image]: https://snyk.io/test/npm/egg-squel/badge.svg?style=flat-square
-[snyk-url]: https://snyk.io/test/npm/egg-squel
-[download-image]: https://img.shields.io/npm/dm/egg-squel.svg?style=flat-square
-[download-url]: https://npmjs.org/package/egg-squel
-
-<!--
-Description here.
--->
-
-## Install
+## 安装
 
 ```bash
 $ npm i egg-squel --save
 ```
 
-## Usage
+## 使用
 
 ```js
 // {app_root}/config/plugin.js
@@ -40,24 +18,74 @@ exports.squel = {
 };
 ```
 
-## Configuration
+## 配置
 
 ```js
 // {app_root}/config/config.default.js
 exports.squel = {
+  client: {
+    // host
+    host: 'localhost',
+    // 端口号
+    port: '3306',
+    // 用户名
+    user: 'root',
+    // 密码
+    password: 'root',
+    // 数据库名
+    database: 'shop',
+    // 其他参数参照https://github.com/mysqljs/mysql
+  },
+  // 是否加载到 app 上，默认开启
+  app: true,
+  // 是否加载到 agent 上，默认关闭
+  agent: false,
 };
 ```
 
-see [config/config.default.js](config/config.default.js) for more detail.
+## 用法
 
-## Example
+### 基本用法
 
-<!-- example here -->
+```js
+class UserService extends Service {
+  async list() {
+    const list = await this.app.squel.select().from('user').limit(10);
+    const count = await this.app.squel.select().from('user').count();
+    return { count, list };
+  }
+}
+```
 
-## Questions & Suggestions
+支持select, insert, update, delete四大类操作，更多用法参照[squel](https://hiddentao.com/squel/)文档
 
-Please open an issue [here](https://github.com/eggjs/egg/issues).
+其中count为本插件拓展的用法，用于方便计数
+
+### 直接执行 sql 语句
+
+有时候还是需要直接执行sql语句
+
+```js
+await this.app.squel.query('select now() as currentTime');
+```
+
+### squel嵌套
+
+query函数可以直接拿到squel实例
+
+```js
+await this.app.squel.query(
+  squel => squel.select()
+    .from("students")
+    .join(
+        squel.select().field('score').from('results'),
+        't'
+    )
+    .outer_join("expelled")
+);
+
+```
 
 ## License
 
-[MIT](LICENSE)
+MIT © [Wang Sijie](http://sijie.wang)
