@@ -1,0 +1,46 @@
+{
+  "name": "egg-squel",
+  "version": "0.1.0",
+  "description": "MySQL plugin for egg using squel",
+  "eggPlugin": {
+    "name": "squel"
+  },
+  "keywords": [
+    "egg",
+    "eggPlugin",
+    "egg-plugin",
+    "mysql",
+    "squel"
+  ],
+  "dependencies": {
+    "mysql": "^2.16.0",
+    "squel": "^5.12.2"
+  },
+  "devDependencies": {
+    "eslint": "^4.11.0",
+    "eslint-config-egg": "^5.1.0"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "scripts": {
+  },
+  "files": [
+    "app.js",
+    "agent.js",
+    "config"
+  ],
+  "ci": {
+    "version": "8, 9"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wangsijie/egg-squel.git"
+  },
+  "bugs": {
+    "url": "https://github.com/wangsijie/egg-squel/issues"
+  },
+  "homepage": "https://github.com/wangsijie/egg-squel",
+  "author": "Wang Sijie",
+  "license": "MIT"
+}
